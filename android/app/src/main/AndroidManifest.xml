@@ -4,11 +4,16 @@
     <!-- Permissions pour la localisation -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+      <!-- Permissions pour les photos -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:label="gover_front"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/NormalTheme">
+        android:theme="@style/NormalTheme"
+        android:enableOnBackInvokedCallback="true">
+       
 
         <activity
             android:name=".MainActivity"

@@ -2,18 +2,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:intl/intl.dart'; // Pour formater l'heure
+import 'package:intl/intl.dart';
 
 class MyGoverDriver extends StatelessWidget {
   final String nom;
   final String prenom;
   final String voiture;
   final String distance;
+  final String statut = "En route";
+  final int rating = 4;
+  final String couleurVehicule = "Noir";
+  final String immatriculation = "AB-123-CD";
+  final String anneeModele = "2020";
 
-  // Position fictive de l'utilisateur
-  final LatLng _userPosition = LatLng(48.8566, 2.3522); // Paris
-  // Position fictive du conducteur
-  final LatLng _driverPosition = LatLng(48.8606, 2.3376); // Autour de Paris
+  final LatLng _userPosition = LatLng(48.8566, 2.3522);
+  final LatLng _driverPosition = LatLng(48.8606, 2.3376);
 
   MyGoverDriver({
     super.key,
@@ -23,11 +26,36 @@ class MyGoverDriver extends StatelessWidget {
     required this.distance,
   });
 
-  // Calcul de l'heure d'arrivée estimée en ajoutant 15 minutes à l'heure actuelle
   String getEstimatedArrivalTime() {
     final currentTime = DateTime.now();
     final estimatedArrivalTime = currentTime.add(const Duration(minutes: 15));
-    return DateFormat('HH:mm').format(estimatedArrivalTime); // Format HH:mm
+    return DateFormat('HH:mm').format(estimatedArrivalTime);
+  }
+
+  Future<void> showConfirmationDialog(BuildContext context, String action) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Voulez-vous vraiment $action ?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Confirmer'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -35,42 +63,64 @@ class MyGoverDriver extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('$prenom $nom'),
+        backgroundColor: Colors.green,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  'Nom : $prenom $nom',
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage('assets/driver_placeholder.png'),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  'Voiture : $voiture',
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Distance : $distance',
-                  style: const TextStyle(fontSize: 18),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$prenom $nom',
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: List.generate(rating, (index) => const Icon(Icons.star, color: Colors.amber, size: 18)),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          // Limiter la hauteur de la carte
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Voiture : $voiture ($couleurVehicule)',
+                  style: const TextStyle(fontSize: 18),
+                ),
+                Text(
+                  'Immatriculation : $immatriculation',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                Text(
+                  'Année : $anneeModele',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
           Container(
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.3,
             child: FlutterMap(
               options: MapOptions(
                 center: _userPosition,
                 zoom: 13.0,
               ),
               children: [
-                // Thème par défaut d'OpenStreetMap
                 TileLayer(
                   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                   subdomains: ['a', 'b', 'c'],
@@ -99,7 +149,6 @@ class MyGoverDriver extends StatelessWidget {
                     ),
                   ],
                 ),
-                // Polyligne entre les deux positions
                 PolylineLayer(
                   polylines: [
                     Polyline(
@@ -112,7 +161,6 @@ class MyGoverDriver extends StatelessWidget {
               ],
             ),
           ),
-          // Espace pour des informations supplémentaires en dessous, en gras
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
@@ -120,12 +168,70 @@ class MyGoverDriver extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
-          // Estimation de l'heure d'arrivée
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              "Heure d'arrivée estimée : ${getEstimatedArrivalTime()}",
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Heure d'arrivée estimée : ${getEstimatedArrivalTime()}",
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Distance restante : 2 km",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Statut : $statut",
+                  style: TextStyle(fontSize: 16, color: statut == "En route" ? Colors.green : Colors.orange),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  "Adresse de départ : 10 Rue de Rivoli",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 5),
+                const Text(
+                  "Adresse d'arrivée : 5 Avenue des Champs-Élysées",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => showConfirmationDialog(context, 'envoyer un message'),
+                    icon: const Icon(Icons.message),
+                    label: const Text("Message"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => showConfirmationDialog(context, 'appeler le conducteur'),
+                    icon: const Icon(Icons.call),
+                    label: const Text("Appeler"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

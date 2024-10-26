@@ -1,6 +1,6 @@
 // lib/pages/home.dart
 import 'package:flutter/material.dart';
-import 'driver/mygover_driver.dart';
+import '../driver/mygover_driver.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome to Gover'),
+        title: const Text('Bienvenue sur Gover'),
         centerTitle: true,
       ),
       body: Padding(
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Entrez les informations de trajet',
+              'Mon trajet ',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -112,9 +112,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
-                    Icon(Icons.search),
+                    Icon(Icons.directions_car),
                     SizedBox(width: 8),
-                    Text('Trouver mon gover !'),
+                    Text('Trouver mon gover'),
                   ],
                 ),
               ),
