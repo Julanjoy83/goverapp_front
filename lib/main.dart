@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'pages/user/home.dart';
 import 'pages/user/inventory.dart';
 import 'pages/user/myaccount.dart';
+import 'pages/login-register/login-register.dart'; // Chemin correct vers la page de connexion
+import 'pages/landing_page.dart'; // Import de la LandingPage
 
 void main() {
   runApp(const MyApp());
@@ -16,46 +18,41 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Basic Flutter App',
       theme: ThemeData(
-        primarySwatch: Colors.green, // Thème principal vert
+        primarySwatch: Colors.green,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.green, // Couleur de toutes les AppBars
-          foregroundColor: Colors.white, // Texte blanc pour les AppBars
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Colors.green, // Couleur des FloatingActionButtons
-          foregroundColor:
-              Colors.white, // Couleur des icônes des boutons flottants
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor:
-                Colors.green, // Couleur de fond des ElevatedButtons
-            foregroundColor: Colors
-                .white, // Couleur du texte et des icônes sur les ElevatedButtons
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           focusedBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: Colors.green), // Bordure verte lors du focus
+            borderSide: BorderSide(color: Colors.green),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide:
-                BorderSide(color: Colors.grey), // Bordure grise lorsqu'inactif
+            borderSide: BorderSide(color: Colors.grey),
           ),
-          labelStyle:
-              TextStyle(color: Colors.green), // Couleur du texte du label
+          labelStyle: TextStyle(color: Colors.green),
         ),
-        iconTheme: const IconThemeData(
-            color: Colors.white), // Icônes en blanc par défaut
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      home: const MainScreen(),
+      home: const LandingPage(), // Démarrer sur la page de démarrage
     );
   }
 }
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final String role; // Paramètre de rôle pour déterminer la vue
+
+  const MainScreen({super.key, required this.role});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -64,14 +61,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  // Liste des pages accessibles depuis le BottomNavigationBar
   final List<Widget> _pages = [
-    const MyHomePage(), // Home Page
-    Inventory(), // Inventory Page
-    const MyAccount(), // Account Page
+    const MyHomePage(),
+    Inventory(),
+    const MyAccount(),
   ];
 
-  // Fonction pour gérer le changement de page via le BottomNavigationBar
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -81,18 +76,19 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.role == "Gover" ? "Gover Dashboard" : "Client Dashboard"),
+      ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green, // Couleur de l'icône sélectionnée
-        unselectedItemColor:
-            Colors.grey, // Couleur des icônes non sélectionnées
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Inventaire'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'Mon compte'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Mon compte'),
         ],
       ),
       drawer: const Drawer(

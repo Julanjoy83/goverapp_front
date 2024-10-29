@@ -1,19 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gover_front"> <!-- Remplacez com.example.gover_front par votre package -->
+    package="com.example.gover_front">
 
     <!-- Permissions pour la localisation -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-      <!-- Permissions pour les photos -->
+    <!-- Permissions pour les photos -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:label="gover_front"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_thumbnail" 
         android:theme="@style/NormalTheme"
         android:enableOnBackInvokedCallback="true">
-       
 
         <activity
             android:name=".MainActivity"

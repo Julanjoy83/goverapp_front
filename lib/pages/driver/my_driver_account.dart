@@ -1,12 +1,12 @@
-// lib/pages/myaccount.dart
+// lib/pages/driver/my_driver_account.dart
 import 'package:flutter/material.dart';
-import 'inventory.dart'; // Import de la page Inventory
-import '../login-register/login-register.dart'; // Import de la page de connexion
+import '../login-register/login-register.dart';
+import 'driver_home.dart'; // Importez la page DriverHomePage pour y revenir
 
-class MyAccount extends StatelessWidget {
-  const MyAccount({super.key});
+class MyDriverAccount extends StatelessWidget {
+  const MyDriverAccount({super.key});
 
-  // Informations fictives de l'utilisateur
+  // Informations fictives du conducteur
   static const String prenom = "John";
   static const String nom = "Doe";
 
@@ -14,8 +14,21 @@ class MyAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mon compte'),
+        title: const Text('Compte du conducteur'),
         centerTitle: true,
+        backgroundColor: Colors.green,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Retourne à la page DriverHomePage au lieu de LoginPage
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DriverHomePage(),
+              ),
+            );
+          },
+        ),
       ),
       body: Column(
         children: [
@@ -43,20 +56,22 @@ class MyAccount extends StatelessWidget {
           ),
           const Divider(), // Ligne de séparation pour le menu
 
-          // Utilisation de Expanded pour occuper tout l'espace restant
+          // Liste des options de compte
           Expanded(
             child: ListView(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.inventory),
-                  title: const Text("Mon inventaire"),
+                  leading: const Icon(Icons.folder),
+                  title: const Text("Mes documents"),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Inventory(),
-                      ),
-                    );
+                    // Navigation vers la page "Mes documents"
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: const Text("Historique des voyages"),
+                  onTap: () {
+                    // Navigation vers la page "Historique des voyages"
                   },
                 ),
                 ListTile(
@@ -64,13 +79,6 @@ class MyAccount extends StatelessWidget {
                   title: const Text("Paramètres"),
                   onTap: () {
                     // Navigation vers la page "Paramètres"
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.message),
-                  title: const Text("Messages"),
-                  onTap: () {
-                    // Navigation vers les messages
                   },
                 ),
                 ListTile(
